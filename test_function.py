@@ -24,7 +24,7 @@ def double_integral(alpha_values, beta_values):
       # integrand = lambda r, a: G(r, a, alpha, beta)
 
       # Perform the double integral
-      integral, _ = scipy.integrate.nquad(G, [[0, np.inf], [0, 2*np.pi]], args=(alpha, beta))
+      integral, _ = integrate.nquad(G, [[0, np.inf], [0, 2*np.pi]], args=(alpha, beta))
 
       # Update minimum if a smaller integral is found
       if integral < min_integral:
