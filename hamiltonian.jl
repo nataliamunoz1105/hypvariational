@@ -1,16 +1,15 @@
-# # Importar la biblioteca SymPy
 using SymPy
 
-# # Definir los símbolos
 @syms x y z alpha beta 
 
 m11 = m12 = 1
 m13 = 7294 
 q1 = q2 = -1.0
 q3 = 2.0
+c1 = 0.390807
 
 function phi1(x, y, z, alpha, beta)
-  return exp(-alpha*x - beta*y)*z^2 
+  return exp(-alpha*x - beta*y)*(1+c1*z)
 end
 
 phi = phi1(x, y, z, alpha, beta)
@@ -20,14 +19,12 @@ function kinetic(phi, r, ma, mb)
 end
 
 function potential(r, qa, qb)
-  return (qa*qb)/r
+  return (qa*qb)/r * phi
 end
 
-function polarization(Φ, ra, rb, rc, m)
-  return -(1/(2m*ra*rb))*(ra^2+rb^2-rc^2)*SymPy.diff(SymPy.diff(phi, ra), rb)
+function polarization(phi, ra, rb, rc, m)
+  return -(1/(2m*ra*rb))*(ra^2+rb^2-rc^2)*SymPy.diff(SymPy.diff(phi, ra), rb);
 end
-
-
 
 function hamiltonian(phi, x, y, z)
   return phi * 
@@ -36,7 +33,12 @@ function hamiltonian(phi, x, y, z)
   + polarization(phi, z, x, y, m11) + polarization(phi, y, z, x, m12) + polarization(phi, x, y, z, m13))
 end
 
-print(hamiltonian(phi, x, y, z))
+lim_inf = abs(x - y)
+lim_sup = x + y
+
+integral_result = integrate(hamiltonian(phi, x, y, z)*z, (z, lim_inf, lim_sup))
+
+println(integral_result)
 
 # function H(x, y, z, α1, β1, γ1, u1, l1)
 #   Φ = Φ1(x, y, z, α1, β1, γ1, u1, l1)
