@@ -1,3 +1,3 @@
-function potential(r, qa, qb)
-    return (qa * qb) / r * phi 
-  end
+function potential(r, qa, qb, phi)
+  return (qa * qb) / r * phi
+end
