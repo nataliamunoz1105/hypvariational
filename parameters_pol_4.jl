@@ -1,8 +1,9 @@
 using Cubature
 using SymPy
 using Printf
+using DelimitedFiles
 
-include("compute_symbolic_integrals.jl")
+include("compute_symbolic_integrals_4.jl")
 include("get_xy_numeric_function.jl")
 
 function quotient(alpha_values, c0_values, c1_values, c2_values)
@@ -11,8 +12,10 @@ function quotient(alpha_values, c0_values, c1_values, c2_values)
   min_c0 = nothing
   min_c1 = nothing
   min_c2 = nothing
-  g1, g2 = compute_symbolic_integrals()
+  g1, g2 = compute_symbolic_integrals_4()
   @syms x y
+  results::Vector{Vector{Float64}} = Vector{Vector{Float64}}()
+  counter::Float64 = 0
   for alpha in alpha_values
     for c0 in c0_values
       for c1 in c1_values
@@ -30,10 +33,14 @@ function quotient(alpha_values, c0_values, c1_values, c2_values)
             min_c1 = c1
             min_c2 = c2
           end
+          counter += 1
+          push!(results, [counter, alpha, c0, c1, c2, quotient])
         end
       end
     end
   end
+  writedlm("history.tsv", results, '\t', header=false)
+  writedlm("result.tsv", [min_alpha, min_c0, min_c1, min_c2, min_quotient], '\t', header=false)
   return min_alpha, min_c0, min_c1, min_c2, min_quotient
 end
 

@@ -4,7 +4,7 @@ include("./quantum_operators/energy_operators/hamiltonian.jl")
 include("./quantum_systems/atomic_systems/helium_atom.jl")
 include("./trial_functions/hylleraas_type/correlated_pol_int.jl");
 
-function compute_symbolic_integrals()
+function compute_symbolic_integrals_4()
   @syms x y z alpha c0 c1 c2 phi
   m1 = m1_he
   m2 = m2_he
